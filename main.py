@@ -21,5 +21,5 @@ async def on_message(message:discord.Message):
 
 # go !
 with open(r"./token.lock", 'r') as file:
-    token = file.read()
+    token = file.read().strip("\n")
 bot.run(token)
