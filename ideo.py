@@ -14,7 +14,8 @@ def chercher(prefix, suffix, namespace, content, liste):
     for item in items:
         if suffix in item:
             link = item.split(suffix)[0]
-            liste.append("["+namespace+link+"](<https://ideopedia.miraheze.org/wiki/"+namespace+link+">)")
+            if not "|" in link:
+                liste.append("["+namespace+link+"](<https://ideopedia.miraheze.org/wiki/"+namespace+link+">)")
 
 @bot.event
 async def on_message(message:discord.Message):
