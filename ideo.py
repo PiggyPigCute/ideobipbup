@@ -13,12 +13,19 @@ async def on_ready():
 async def on_message(message:discord.Message):
     if message.author.bot: return
 
+    trigger = False
+    liste = []
+
     content = message.content
     afters = content.split("[[")[1:]
     for item in afters:
         if "]]" in item:
             link = item.split("]]")[0]
-            await message.channel.send("["+link+"](<https://ideopedia.miraheze.org/wiki/"+link+">)")
+            trigger = True
+            liste.append("["+link+"](<https://ideopedia.miraheze.org/wiki/"+link+">)")
+    
+    if trigger:
+        message.channel.send(", ".join(liste))
 
 # go !
 with open(r"./token.lock", 'r') as file:
