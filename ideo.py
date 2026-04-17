@@ -25,7 +25,7 @@ async def on_message(message:discord.Message):
             liste.append("["+link+"](<https://ideopedia.miraheze.org/wiki/"+link+">)")
     
     if trigger:
-        message.channel.send(", ".join(liste))
+        await message.channel.send(", ".join(liste))
 
 # go !
 with open(r"./token.lock", 'r') as file:
