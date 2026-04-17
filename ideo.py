@@ -9,22 +9,24 @@ bot = discord.Client(intents=intents)
 async def on_ready():
     print("Let's go !")
 
+def chercher(prefix, suffix, namespace, content, liste):
+    items = content.split(prefix)[1:]
+    for item in items:
+        if suffix in item:
+            link = item.split(suffix)[0]
+            liste.append("["+namespace+link+"](<https://ideopedia.miraheze.org/wiki/"+namespace+link+">)")
+
 @bot.event
 async def on_message(message:discord.Message):
     if message.author.bot: return
 
-    trigger = False
     liste = []
 
-    content = message.content
-    afters = content.split("[[")[1:]
-    for item in afters:
-        if "]]" in item:
-            link = item.split("]]")[0]
-            trigger = True
-            liste.append("["+link+"](<https://ideopedia.miraheze.org/wiki/"+link+">)")
+    chercher("[[",   "]]", "",         message.content, liste)
+    chercher("{{",   "}}", "Modèle:",  message.content, liste)
+    chercher("{{A|", "}}", "Article:", message.content, liste)
     
-    if trigger:
+    if len(liste)>0:
         await message.channel.send(", ".join(liste))
 
 # go !
