@@ -1,5 +1,6 @@
 
 import discord
+import re
 
 intents = discord.Intents.default()
 intents.message_content = True
@@ -23,9 +24,12 @@ async def on_message(message:discord.Message):
 
     liste = []
 
-    chercher("[[",   "]]", "",         message.content, liste)
-    chercher("{{",   "}}", "Modèle:",  message.content, liste)
-    chercher("{{A|", "}}", "Article:", message.content, liste)
+    # ignorer `...` et {{{...}}}
+    contenu = re.sub("{{{[^{]*}}}","",re.sub("`[^`]+`","",message.content))
+
+    chercher("[[",   "]]", "",         contenu, liste)
+    chercher("{{",   "}}", "Modèle:",  contenu, liste)
+    chercher("{{A|", "}}", "Article:", contenu, liste)
     
     if len(liste)>0:
         await message.channel.send(", ".join(liste))
